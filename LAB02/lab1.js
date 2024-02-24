@@ -4,51 +4,55 @@ prompt.start();
 
 prompt.get(['userSelection'], function(err, result){
     
-    const userSelection = result.userSelection.toUpperCase();
+    const userSelection = result.userSelection.toLowerCase();
 
-    if(userSelection !== 'ROCK' && userSelection !== 'PAPER' && userSelection != 'SCISSORS'){
-        console.log("Invalid Selection. Please choose ROCK, PAPER or SCISSORS (in UPPERCASE).")
+    if(userSelection !== 'rock' && userSelection !== 'paper' && userSelection != 'scissors'){
+        console.log("Invalid. Select rock, paper or scissors.")
         return;
     }
 
-    console.log("Your Selection: " + userSelection);
+    console.log("User Selection is " + userSelection);
 
     const randomNumber = Math.random();
 
-function getComputerSelection(randomNumber){
+function compSelection(randomNumber){
     if (randomNumber >= 0 && randomNumber <= 0.34){
-        return 'PAPER';
+        return 'paper';
     }
-    if (randomNumber > 0.34 && randomNumber <= 0.67){
-        return 'SCISSORS';
+    if (randomNumber >= 0.35 && randomNumber <= 0.67){
+        return 'scissors';
     }
     else{
-        return 'ROCK';
+        return 'rock';
     }
     
 }
 
-    const computerSelection = getComputerSelection(randomNumber);
+    const computerSelection = compSelection(randomNumber);
 
-    console.log("Computer Selection: " + computerSelection);
+    console.log("Computer Selection is " + computerSelection);
 
-    let winner;
-    if(userSelection === computerSelection){
-        winner = "It's a tie";
-    }
-    else if(
-        (userSelection==='ROCK' && computerSelection==='SCISSORS') ||
-        (userSelection==='SCISSORS' && computerSelection==='PAPER') ||
-        (userSelection==='PAPER' && computerSelection==='ROCK')
+    let message;
+
+    if(
+        (userSelection==='scissors' && computerSelection==='paper')||
+        (userSelection==='paper' && computerSelection==='rock') ||
+        (userSelection==='rock' && computerSelection==='scissors') 
 
     )
     {
-        winner = "User wins";
+        message = "User wins";
+    }
+
+    else if(userSelection === computerSelection){
+        message = "It's a tie";
     }
     else{
-        winner = "Computer wins";
+        message = "Computer wins";
     }
-    console.log(winner);
+
+
+    console.log(message);
 })
 
 
