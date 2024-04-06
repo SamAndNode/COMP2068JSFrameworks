@@ -1,0 +1,76 @@
+<div class="container mt-4">
+    <h1>Assignments</h1>
+
+    {{#if assignments}}
+    <div class="table-responsive">
+        <table id="assignmentsTable" class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Due Date</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Category</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each assignments}}
+                <tr>
+                    <td>{{this.title}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.dueDate}}</td>
+                    <td>{{this.priority}}</td>
+                    <td>{{this.status}}</td>
+                    <td>{{this.category}}</td>
+                    <td>
+                        <form id="deleteForm" action="/assignment/{{this._id}}" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                      <!--  <a href="/assignment/{{this._id}}/edit" class="btn btn-primary btn-sm">Edit</a> -->
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{else}}
+    <p>No assignments found</p>
+    {{/if}}
+
+    <a href="/assignment/add" class="btn btn-primary mt-3">Add Assignment</a> 
+
+    <a href="/dashboard" class="btn btn-success mt-3">Dashboard</a>
+
+</div>
+
+
+<script>
+    document.querySelectorAll('.deleteForm').forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Confirm deletion
+            if (confirm('Are you sure you want to delete this assignment?')) {
+                // Send a DELETE request using AJAX
+                fetch(this.action, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        // If there is an error, display an alert message
+                        console.error('Failed to delete assignment');
+                    }
+                    // Refresh the page
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while deleting the assignment');
+                });
+            }
+        });
+    });
+</script>

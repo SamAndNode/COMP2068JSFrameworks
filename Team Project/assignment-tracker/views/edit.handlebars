@@ -1,0 +1,77 @@
+<div class="container mt-4">
+    <h1>Edit Assignment</h1>
+
+    <form id="editForm" action="/assignment/{{assignment._id}}" method="POST">
+        <input type="hidden" name="_method" value="PUT">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{assignment.title}}">
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3">{{assignment.description}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="dueDate">Due Date</label>
+            <input type="date" class="form-control" id="dueDate" name="dueDate" value="{{assignment.dueDate}}">
+        </div>
+        <div class="form-group">
+            <label for="priority">Priority</label>
+            <select class="form-control" id="priority" name="priority">
+                <option value="High" {{#if (eq assignment.priority "High")}}selected{{/if}}>High</option>
+                <option value="Medium" {{#if (eq assignment.priority "Medium")}}selected{{/if}}>Medium</option>
+                <option value="Low" {{#if (eq assignment.priority "Low")}}selected{{/if}}>Low</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select class="form-control" id="status" name="status">
+                <option value="Not Started" {{#if (eq assignment.status "Not Started")}}selected{{/if}}>Not Started</option>
+                <option value="In Progress" {{#if (eq assignment.status "In Progress")}}selected{{/if}}>In Progress</option>
+                <option value="Completed" {{#if (eq assignment.status "Completed")}}selected{{/if}}>Completed</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select class="form-control" id="category" name="category">
+                <option value="Homework" {{#if (eq assignment.category "Homework")}}selected{{/if}}>Homework</option>
+                <option value="Project" {{#if (eq assignment.category "Project")}}selected{{/if}}>Project</option>
+                <option value="Exam" {{#if (eq assignment.category "Exam")}}selected{{/if}}>Exam</option>
+                <option value="Other" {{#if (eq assignment.category "Other")}}selected{{/if}}>Other</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('editForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        fetch(this.action, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                dueDate: document.getElementById('dueDate').value,
+                priority: document.getElementById('priority').value,
+                status: document.getElementById('status').value,
+                category: document.getElementById('category').value
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/';
+            } else {
+                alert('Failed to update assignment');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating the assignment');
+        });
+    });
+</script>
